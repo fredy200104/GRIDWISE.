@@ -50,3 +50,4 @@ app.*.map.json
 *.pem
 *serviceAccount*.json
 firebase-adminsdk*.json
+node_modules

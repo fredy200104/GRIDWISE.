@@ -3,8 +3,18 @@ import 'package:flutter/foundation.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 import '../models/chat_message.dart';
 
-/// URL base del backend — ajusta según tu entorno
-const String _kBackendUrl = 'http://localhost:3000';
+import 'dart:io' show Platform;
+
+/// Obtiene la URL del backend dinámicamente según la plataforma
+String get _kBackendUrl {
+  if (kIsWeb) {
+    return 'http://localhost:3000';
+  } else if (Platform.isAndroid) {
+    return 'http://10.0.2.2:3000'; // IP especial para acceder a localhost desde emulador Android
+  } else {
+    return 'http://localhost:3000'; // iOS simulador, Windows de escritorio, etc.
+  }
+}
 
 /// Estados posibles de la conexión Socket.IO
 enum ChatConnectionState { disconnected, connecting, connected, error }
