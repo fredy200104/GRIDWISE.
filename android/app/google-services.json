@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "1055160119566",
+    "project_id": "gridwise-5392a",
+    "storage_bucket": "gridwise-5392a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1055160119566:android:09f18af76025468c29275f",
+        "android_client_info": {
+          "package_name": "com.example.gridwise"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1055160119566-tfhts4ohbtr269d2bmhhfdemnvvnosi5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9QtrdlTGOXyLDQw_kmI6iIlbaaqxCx_U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1055160119566-tfhts4ohbtr269d2bmhhfdemnvvnosi5.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1055160119566-b6p4rgedf4jllgqo44ch38vnff82qcf6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.gridwise"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,57 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return signedIn() && request.auth.uid == userId;
+    }
+
+    match /users/{userId} {
+      allow read, update: if isOwner(userId);
+      allow create: if isOwner(userId);
+      allow delete: if false;
+
+      match /devices/{deviceId} {
+        allow read, create, update, delete: if isOwner(userId);
+      }
+
+      match /alerts/{alertId} {
+        allow read, create, update, delete: if isOwner(userId);
+      }
+
+      match /dashboard_summary/{docId} {
+        allow read, create, update: if isOwner(userId);
+      }
+
+      match /consumption_records/{recordId} {
+        allow read, create, update, delete: if isOwner(userId);
+      }
+
+      match /iot_devices/{deviceId} {
+        allow read, create, update, delete: if isOwner(userId);
+      }
+    }
+
+    match /recommendations/{docId} {
+      allow read: if signedIn() && resource.data.user_id == request.auth.uid;
+      allow create: if signedIn() && request.resource.data.user_id == request.auth.uid;
+      allow update, delete: if false;
+    }
+
+    match /iot_devices/{deviceId} {
+      allow read: if signedIn() && resource.data.user_id == request.auth.uid;
+      allow create: if signedIn() && request.resource.data.user_id == request.auth.uid;
+      allow update: if signedIn() && resource.data.user_id == request.auth.uid;
+      allow delete: if false;
+    }
+
+    match /device_data_unified/{docId} {
+      allow read: if signedIn() && resource.data.user_id == request.auth.uid;
+      allow create: if signedIn() && request.resource.data.user_id == request.auth.uid;
+      allow update, delete: if false;
+    }
+  }
+}
