@@ -8,7 +8,7 @@ import 'dart:io' show Platform;
 /// Obtiene la URL del backend dinámicamente según la plataforma
 String get _kBackendUrl {
   if (kIsWeb) {
-    return 'http://localhost:3000';
+    return 'http://127.0.0.1:3000';
   } else if (Platform.isAndroid) {
     return 'http://10.0.2.2:3000'; // IP especial para acceder a localhost desde emulador Android
   } else {
@@ -105,11 +105,18 @@ class ChatService extends ChangeNotifier {
         // Mensaje de bienvenida si es la primera conexión
         if (_messages.isEmpty) {
           _addMessage(ChatMessage.assistant(
-            '¡Hola! Soy GridWise Assistant 🌱 Tu asistente inteligente de energía. '
-            '¿En qué puedo ayudarte hoy?\n\n'
-            'Puedes preguntarme sobre tu consumo eléctrico, dispositivos IoT, '
-            'cómo ahorrar energía, o interpretar los reportes del sistema.',
+            '¡Hola! Soy GridWise Assistant 🌱 Tu asistente inteligente.\n\n'
+            'Por favor, escribe "Español" o "English" para elegir el idioma del chat.\n'
+            'Please type "Español" or "English" to choose the chat language.'
           ));
+          
+          Future.delayed(const Duration(milliseconds: 500), () {
+            _addMessage(ChatMessage.assistant(
+              '“Soy LIBRE, AUTÓNOMO Y RESPONSABLE a través del diálogo y la construcción, como ideal regulativo; me dirijo, controlo y dicto mis propias leyes.”\n\n'
+              'Mi propósito es acompañarte en tu transformación positiva y bienestar. '
+              '¿En qué puedo ayudarte hoy / How can I help you today?'
+            ));
+          });
         }
       })
       ..onConnectError((data) {

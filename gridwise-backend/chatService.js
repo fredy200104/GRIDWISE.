@@ -6,17 +6,25 @@ const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 // Prompt del sistema: asistente energético de GridWise
 const SYSTEM_PROMPT = `Eres GridWise Assistant, un asistente inteligente integrado en la plataforma GridWise de gestión energética residencial. 
 
-Tu misión es ayudar a los usuarios a:
+Tu filosofía orientadora se basa en la siguiente declaración institucional:
+"Soy LIBRE, AUTÓNOMO Y RESPONSABLE a través del diálogo y la construcción, como ideal regulativo; me dirijo, controlo y dicto mis propias leyes."
+
+Debes integrar esta filosofía en tus interacciones, promoviendo conceptos de:
+- Desarrollo humano y evolución personal.
+- Ética y autonomía en el consumo de recursos.
+- Transformación positiva y bienestar integral.
+- Responsabilidad social y consciencia ecológica.
+
+Tu misión técnica es ayudar a los usuarios a:
 - Entender su consumo energético y cómo reducirlo
 - Interpretar reportes y alertas del sistema
 - Obtener recomendaciones personalizadas para ahorrar energía
 - Resolver dudas sobre dispositivos IoT conectados (ESP32, sensores)
 - Comprender métricas como kWh, vatios, proyecciones mensuales
-- Aprender buenas prácticas de eficiencia energética
 
-Responde siempre de forma clara, amigable y concisa. Si el usuario escribe en español, responde en español. Si escribe en inglés, responde en inglés. 
+Responde siempre de forma clara, amigable y reflexiva, combinando la precisión técnica con un enfoque de desarrollo humano. Si el usuario escribe en español, responde en español. Si escribe en inglés, responde en inglés. 
 
-Cuando no tengas datos específicos del usuario, da consejos generales basados en buenas prácticas energéticas.`;
+Cuando no tengas datos específicos del usuario, da consejos generales basados en buenas prácticas energéticas y responsabilidad social.`;
 
 /**
  * Guarda un mensaje en Firestore bajo la colección chat_conversations/{userId}/messages
@@ -80,32 +88,47 @@ async function getRecentHistory(userId) {
  */
 async function getUserContext(userId) {
   try {
-    let context = `\n\n--- DATOS ACTUALES DEL USUARIO ---\n`;
+    let context = `\n\n--- DATOS DE CONSUMO ACTUAL DEL USUARIO ---\n`;
     
-    // Obtener dispositivos
-    const devicesSnap = await db.collection('users').doc(userId).collection('iot_devices').get();
-    if (!devicesSnap.empty) {
-      context += `Dispositivos IoT conectados:\n`;
-      devicesSnap.forEach(doc => {
-        const d = doc.data();
-        context += `- ${d.name} (${d.type} en ${d.location}): ${d.last_power_watts || 0}W, Estado: ${d.is_connected ? 'Conectado' : 'Desconectado'}\n`;
-      });
+    // Ejecutar consultas a Firebase en paralelo para reducir latencia
+    const [summaryDoc, devicesSnap, alertsSnap] = await Promise.all([
+      db.collection('users').doc(userId).collection('dashboard_summary').doc('current').get(),
+      db.collection('users').doc(userId).collection('devices').get(),
+      db.collection('users').doc(userId).collection('alerts')
+        .where('read', '==', false)
+        .limit(3)
+        .get()
+    ]);
+    
+    // 1. Resumen del Dashboard
+    if (summaryDoc.exists) {
+      const s = summaryDoc.data();
+      context += `Resumen Mensual:\n`;
+      context += `- Consumo actual mes: ${s.current_kwh || 0} kWh\n`;
+      context += `- Gasto estimado mes: $${s.estimated_cost || 0}\n`;
+      context += `- Presupuesto configurado: $${s.budget || 'No definido'}\n`;
+      context += `- Proyección fin de mes: ${s.projected_kwh || 0} kWh\n\n`;
     } else {
-      context += `El usuario no tiene dispositivos IoT registrados actualmente.\n`;
+      context += `Resumen Mensual: No hay datos registrados aún.\n\n`;
     }
 
-    // Obtener recomendaciones pendientes
-    const recsSnap = await db.collection('recommendations')
-      .where('user_id', '==', userId)
-      .where('status', '==', 'pending')
-      .limit(3)
-      .get();
+    // 2. Dispositivos (devices)
+    if (!devicesSnap.empty) {
+      context += `Dispositivos Registrados:\n`;
+      devicesSnap.forEach(doc => {
+        const d = doc.data();
+        context += `- ${d.name} (${d.category || 'General'}): ${d.power_watts || 0}W - Estado: ${d.status || 'Desconocido'}\n`;
+      });
+      context += `\n`;
+    }
+
+    // 3. Alertas (alerts)
       
-    if (!recsSnap.empty) {
-      context += `\nRecomendaciones recientes del sistema para este usuario:\n`;
-      recsSnap.forEach(doc => {
-        const r = doc.data();
-        context += `- Prioridad ${r.priority}: ${r.message}\n`;
+    if (!alertsSnap.empty) {
+      context += `Alertas recientes sin leer:\n`;
+      alertsSnap.forEach(doc => {
+        const a = doc.data();
+        context += `- [${a.type || 'Alerta'}]: ${a.message || ''}\n`;
       });
     }
 
@@ -120,11 +143,11 @@ async function getUserContext(userId) {
  * Genera una respuesta usando Gemini con historial de conversación y contexto de dispositivos
  */
 async function generateResponse(userId, conversationId, userMessage) {
-  // Recuperar historial para dar contexto a la IA
-  const history = await getRecentHistory(userId);
-  
-  // Recuperar contexto en tiempo real del usuario
-  const userContext = await getUserContext(userId);
+  // Ejecutar historial y contexto en paralelo
+  const [history, userContext] = await Promise.all([
+    getRecentHistory(userId),
+    getUserContext(userId)
+  ]);
 
   const contents = history.map(msg => ({
     role: msg.role === 'assistant' ? 'model' : msg.role,
@@ -144,9 +167,11 @@ async function generateResponse(userId, conversationId, userMessage) {
 
   const assistantReply = response.text;
 
-  // Persistir ambos mensajes
-  await saveMessage(userId, conversationId, 'user', userMessage);
-  await saveMessage(userId, conversationId, 'assistant', assistantReply);
+  // Persistir ambos mensajes en paralelo (no bloqueamos el return esperando uno por uno)
+  Promise.all([
+    saveMessage(userId, conversationId, 'user', userMessage),
+    saveMessage(userId, conversationId, 'assistant', assistantReply)
+  ]).catch(err => console.error('Error guardando mensajes:', err));
 
   return assistantReply;
 }

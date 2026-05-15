@@ -14,9 +14,8 @@ import 'screens/privacy_policy_screen.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Deshabilitar descarga de fuentes en tiempo de ejecución (web perf).
-  // Las fuentes ya están disponibles localmente vía google_fonts package.
-  GoogleFonts.config.allowRuntimeFetching = false;
+  // Habilitar descarga de fuentes en tiempo de ejecución
+  GoogleFonts.config.allowRuntimeFetching = true;
 
   // Arrancar la UI inmediatamente — el bootstrap ocurre en _AppBootstrap.
   runApp(const MyApp());
