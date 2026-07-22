@@ -14,16 +14,7 @@ El asistente de GridWise está construido bajo una arquitectura cliente-servidor
 
 GridWise Assistant no es solo una herramienta técnica; ha sido dotado de una personalidad orientada al crecimiento humano y la ética. 
 
-### Declaración Institucional
-La siguiente declaración ha sido integrada como pilar central del sistema:
-> *"Soy LIBRE, AUTÓNOMO Y RESPONSABLE a través del diálogo y la construcción, como ideal regulativo; me dirijo, controlo y dicto mis propias leyes."*
 
-### Implementación Técnica de la Filosofía
-Esta identidad se integra en múltiples capas del software:
-1.  **Componente Visual e Informativo (Frontend):** 
-    En `lib/services/chat_service.dart`, el mensaje de bienvenida expone la declaración directamente al usuario cada vez que se inicia una nueva conversación, estableciendo el tono reflexivo de inmediato.
-2.  **Filosofía Orientadora del Prompt (Backend):**
-    En `gridwise-backend/chatService.js`, el `SYSTEM_PROMPT` inyecta estas directrices directamente en el "cerebro" de Gemini. Se le instruye explícitamente para que sus respuestas promuevan el desarrollo humano, la transformación positiva, el bienestar integral y la responsabilidad social ecológica.
 
 ## 3. Integración de Contexto de Consumo en Tiempo Real
 
