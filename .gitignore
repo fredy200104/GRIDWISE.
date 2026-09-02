@@ -1,53 +1,96 @@
-# Miscellaneous
-*.class
-*.log
-*.pyc
-*.swp
-.DS_Store
-.atom/
-.build/
-.buildlog/
-.history
-.svn/
-.swiftpm/
-migrate_working_dir/
+# GRIDWISE Backend .gitignore
 
-# IntelliJ related
-*.iml
-*.ipr
-*.iws
-.idea/
+# Dependencies
+node_modules/
+npm-debug.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
 
-# The .vscode folder contains launch configuration and tasks you configure in
-# VS Code which you may wish to be included in version control, so this line
-# is commented out by default.
-#.vscode/
-
-# Flutter/Dart/Pub related
-**/doc/api/
-**/ios/Flutter/.last_build_id
-.dart_tool/
-.flutter-plugins-dependencies
-.pub-cache/
-.pub/
-/build/
-/coverage/
-
-# Symbolication related
-app.*.symbols
-
-# Obfuscation related
-app.*.map.json
-
-# Android Studio will place build artifacts here
-/android/app/debug
-/android/app/profile
-/android/app/release
-
-# Secrets / environment
+# Environment variables
 .env
-.env.*
+.env.local
+.env.*.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+*.sublime-project
+*.sublime-workspace
+
+# Build output
+dist/
+build/
+.tsc/
+out/
+*.bundle.js
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# Logs
+logs/
+*.log
+
+# Temp files
+tmp/
+temp/
+*.tmp
+
+# Firebase
+.firebase/
+.firebaserc
+firebase-debug.log*
+
+# OS
+.DS_Store
+.AppleDouble
+.LSOverride
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+
+# Package lock files (optional - depends on your workflow)
+# package-lock.json
+# yarn.lock
+
+# Compiled files
+*.js.map
+*.ts.map
+
+# Runtime data
+*.pid
+*.seed
+
+# Optional REPL history
+.node_repl_history
+
+# Credentials
 *.pem
-*serviceAccount*.json
-firebase-adminsdk*.json
-node_modules
+*.key
+*.cert
+*.crt
+credentials/
+secrets/
+
+# Docker
+docker-compose.override.yml
+.docker/
+
+# IDE specific
+.eslintcache
+.prettierignore
+
+# Backup files
+*.backup
+*.bak

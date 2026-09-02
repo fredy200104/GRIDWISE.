@@ -1,0 +1,47 @@
+# GRIDWISE Backend - requirements.txt
+
+# Framework
+express==4.18.2
+
+# Database
+firebase-admin==6.2.0
+firebase==9.18.0
+
+# Authentication
+jsonwebtoken==9.1.0
+bcrypt==5.0.1
+
+# MQTT/IoT
+paho-mqtt==1.6.1
+
+# Google AI (Gemini)
+google-generativeai==0.3.0
+
+# Utilities
+dotenv==0.0.5
+axios==1.4.0
+cors==2.8.5
+morgan==1.10.0
+helmet==7.0.0
+
+# Validation
+joi==17.10.0
+
+# Caching
+redis==5.0.0
+
+# Testing
+jest==29.7.0
+supertest==6.3.3
+
+# Development
+nodemon==3.0.1
+eslint==8.48.0
+prettier==3.0.2
+
+# Type checking
+typescript==5.2.2
+
+# Documentation
+swagger-ui-express==4.6.2
+swagger-jsdoc==6.2.8
