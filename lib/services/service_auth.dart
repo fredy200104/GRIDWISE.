@@ -13,54 +13,100 @@ class AuthService {
     return regex.hasMatch(value);
   }
 
+  /// Convierte errores de Firebase a mensajes legibles en español
+  String _firebaseErrorMessage(FirebaseAuthException e) {
+    switch (e.code) {
+      case 'email-already-in-use':
+        return 'Este correo ya está registrado. Intenta iniciar sesión.';
+      case 'invalid-email':
+        return 'El correo electrónico no es válido.';
+      case 'weak-password':
+        return 'La contraseña es muy débil. Usa al menos 8 caracteres y un número.';
+      case 'operation-not-allowed':
+        return 'El registro con correo no está habilitado. Contacta al soporte.';
+      case 'network-request-failed':
+        return 'Sin conexión a internet. Verifica tu red e intenta de nuevo.';
+      case 'too-many-requests':
+        return 'Demasiados intentos. Espera unos minutos e intenta de nuevo.';
+      case 'user-disabled':
+        return 'Esta cuenta ha sido deshabilitada.';
+      case 'user-not-found':
+        return 'No existe una cuenta con este correo.';
+      case 'wrong-password':
+        return 'Contraseña incorrecta.';
+      default:
+        return 'Error: ${e.message ?? e.code}';
+    }
+  }
+
   // Registrar usuario y guardar datos en Firestore
+  // Lanza [Exception] con mensaje legible si falla
   Future<User?> registerWithEmailPassword({
     required String email,
     required String password,
     required String name,
     required String phone,
   }) async {
+    // Validaciones previas (doble capa de seguridad)
+    if (!_isValidEmail(email)) {
+      throw Exception('El correo electrónico no es válido.');
+    }
+    if (password.length < 8) {
+      throw Exception('La contraseña debe tener al menos 8 caracteres.');
+    }
+    if (!RegExp(r'[0-9]').hasMatch(password)) {
+      throw Exception('La contraseña debe contener al menos un número.');
+    }
+
     try {
-      if (!_isValidEmail(email)) return null;
-      if (password.length < 8 || !RegExp(r'[0-9]').hasMatch(password)) return null;
-      UserCredential result = await _auth.createUserWithEmailAndPassword(
+      final UserCredential result = await _auth.createUserWithEmailAndPassword(
         email: email.trim(),
         password: password,
       );
-      User? user = result.user;
+      final User? user = result.user;
 
       if (user != null) {
-        // Guardamos el nombre también en el perfil de Firebase Auth
-        await user.updateDisplayName(name);
+        // Actualizamos el nombre en Firebase Auth
+        await user.updateDisplayName(name.trim());
 
+        // Guardamos el perfil en Firestore
         await _firestore.collection('users').doc(user.uid).set({
-          'name': name,
+          'name': name.trim(),
           'email': email.trim(),
           'phone': phone.trim(),
           'createdAt': FieldValue.serverTimestamp(),
         });
       }
       return user;
-    } catch (_) {
-      return null;
+    } on FirebaseAuthException catch (e) {
+      throw Exception(_firebaseErrorMessage(e));
+    } catch (e) {
+      throw Exception('Error inesperado al registrar. Intenta de nuevo.');
     }
   }
 
-  // Iniciar sesión
+  // Iniciar sesión — lanza [Exception] con mensaje legible si falla
   Future<User?> signInWithEmailPassword({
     required String email,
     required String password,
   }) async {
+    if (!_isValidEmail(email)) {
+      throw Exception('El correo electrónico no es válido.');
+    }
+    if (password.length < 8) {
+      throw Exception('La contraseña debe tener al menos 8 caracteres.');
+    }
+
     try {
-      if (!_isValidEmail(email)) return null;
-      if (password.length < 8) return null;
-      UserCredential result = await _auth.signInWithEmailAndPassword(
+      final UserCredential result = await _auth.signInWithEmailAndPassword(
         email: email.trim(),
         password: password,
       );
       return result.user;
-    } catch (_) {
-      return null;
+    } on FirebaseAuthException catch (e) {
+      throw Exception(_firebaseErrorMessage(e));
+    } catch (e) {
+      throw Exception('Error inesperado al iniciar sesión. Intenta de nuevo.');
     }
   }
 
@@ -70,19 +116,13 @@ class AuthService {
       UserCredential userCredential;
 
       if (kIsWeb) {
-        // Flujo recomendado para Flutter Web
         final GoogleAuthProvider googleProvider = GoogleAuthProvider();
         googleProvider.setCustomParameters({'prompt': 'select_account'});
-
         userCredential = await _auth.signInWithPopup(googleProvider);
       } else {
-        // Flujo para Android / iOS / escritorio
         final GoogleSignIn googleSignIn = GoogleSignIn();
         final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
-        if (googleUser == null) {
-          // El usuario canceló el inicio de sesión
-          return null;
-        }
+        if (googleUser == null) return null;
 
         final GoogleSignInAuthentication googleAuth =
             await googleUser.authentication;
@@ -156,7 +196,7 @@ class AuthService {
         await googleSignIn.signOut();
       }
     } catch (_) {
-      // Ignorar si falla el cierre de sesión de Google (p. ej. no estaba logueado con Google)
+      // Ignorar si falla el cierre de sesión de Google
     }
     await _auth.signOut();
   }

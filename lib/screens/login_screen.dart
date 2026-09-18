@@ -15,6 +15,7 @@ class _LoginScreenState extends State<LoginScreen> {
   String email = '';
   String password = '';
   bool loading = false;
+  bool _obscurePassword = true;
 
   bool _isValidEmail(String value) {
     return RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$').hasMatch(value.trim());
@@ -58,10 +59,11 @@ class _LoginScreenState extends State<LoginScreen> {
                         const SizedBox(height: 24),
                         TextFormField(
                           style: TextStyle(color: colorScheme.onSurface),
+                          keyboardType: TextInputType.emailAddress,
                           decoration: InputDecoration(
-                            labelText: "Correo",
+                            labelText: "Correo electrónico",
                             labelStyle: TextStyle(color: colorScheme.onSurfaceVariant),
-                            prefixIcon: Icon(Icons.email, color: colorScheme.outline),
+                            prefixIcon: Icon(Icons.email_outlined, color: colorScheme.outline),
                             border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                             filled: true,
                             fillColor: isDark ? colorScheme.surface : const Color(0xFFF1F3F4),
@@ -70,22 +72,30 @@ class _LoginScreenState extends State<LoginScreen> {
                               borderSide: BorderSide(color: colorScheme.primary, width: 2),
                             ),
                           ),
-                          onChanged: (val) => email = val,
+                          onChanged: (val) => email = val.trim(),
                           validator: (val) {
                             final value = (val ?? '').trim();
                             if (value.isEmpty) return 'Ingresa tu correo';
-                            if (!_isValidEmail(value)) return 'Correo invalido';
+                            if (!_isValidEmail(value)) return 'Correo inválido';
                             return null;
                           },
                         ),
                         const SizedBox(height: 16),
                         TextFormField(
-                          obscureText: true,
+                          obscureText: _obscurePassword,
                           style: TextStyle(color: colorScheme.onSurface),
                           decoration: InputDecoration(
                             labelText: "Contraseña",
                             labelStyle: TextStyle(color: colorScheme.onSurfaceVariant),
-                            prefixIcon: Icon(Icons.lock, color: colorScheme.outline),
+                            prefixIcon: Icon(Icons.lock_outline, color: colorScheme.outline),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                                color: colorScheme.outline,
+                                size: 20,
+                              ),
+                              onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                            ),
                             border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                             filled: true,
                             fillColor: isDark ? colorScheme.surface : const Color(0xFFF1F3F4),
@@ -95,7 +105,11 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                           onChanged: (val) => password = val,
-                          validator: (val) => val!.length < 6 ? 'Mínimo 6 caracteres' : null,
+                          validator: (val) {
+                            if ((val ?? '').isEmpty) return 'Ingresa tu contraseña';
+                            if ((val ?? '').length < 8) return 'Mínimo 8 caracteres';
+                            return null;
+                          },
                         ),
                         const SizedBox(height: 32),
                         SizedBox(
@@ -110,17 +124,28 @@ class _LoginScreenState extends State<LoginScreen> {
                             onPressed: loading ? null : () async {
                               if (_formKey.currentState!.validate()) {
                                 setState(() => loading = true);
-                                var user = await _authService.signInWithEmailPassword(
-                                    email: email, password: password);
-                                setState(() => loading = false);
-
-                                if (!context.mounted) return;
-                                if (user != null) {
-                                  Navigator.pushReplacementNamed(context, '/home');
-                                } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(content: Text('Error al iniciar sesión')),
+                                try {
+                                  final user = await _authService.signInWithEmailPassword(
+                                    email: email.trim(),
+                                    password: password,
                                   );
+                                  if (user != null && context.mounted) {
+                                    Navigator.pushReplacementNamed(context, '/home');
+                                  }
+                                } catch (e) {
+                                  if (context.mounted) {
+                                    final msg = e.toString().replaceFirst('Exception: ', '');
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(msg),
+                                        backgroundColor: Theme.of(context).colorScheme.error,
+                                        behavior: SnackBarBehavior.floating,
+                                        duration: const Duration(seconds: 5),
+                                      ),
+                                    );
+                                  }
+                                } finally {
+                                  if (mounted) setState(() => loading = false);
                                 }
                               }
                             },

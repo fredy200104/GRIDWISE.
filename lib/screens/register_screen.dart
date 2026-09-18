@@ -189,24 +189,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             onPressed: loading ? null : () async {
                               if (_formKey.currentState!.validate()) {
                                 setState(() => loading = true);
-                                var user = await _authService.registerWithEmailPassword(
-                                  email: email.trim(),
-                                  password: password,
-                                  name: name.trim(),
-                                  phone: phone.trim(),
-                                );
-                                setState(() => loading = false);
-
-                                if (user != null && context.mounted) {
-                                  Navigator.pushReplacementNamed(context, '/home');
-                                } else if (context.mounted) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: const Text('No se pudo registrar. Verifica tus datos o intenta con otro correo.'),
-                                      backgroundColor: Theme.of(context).colorScheme.error,
-                                      behavior: SnackBarBehavior.floating,
-                                    ),
+                                try {
+                                  final user = await _authService.registerWithEmailPassword(
+                                    email: email.trim(),
+                                    password: password,
+                                    name: name.trim(),
+                                    phone: phone.trim(),
                                   );
+                                  if (user != null && context.mounted) {
+                                    Navigator.pushReplacementNamed(context, '/home');
+                                  }
+                                } catch (e) {
+                                  if (context.mounted) {
+                                    final msg = e.toString().replaceFirst('Exception: ', '');
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(msg),
+                                        backgroundColor: Theme.of(context).colorScheme.error,
+                                        behavior: SnackBarBehavior.floating,
+                                        duration: const Duration(seconds: 5),
+                                      ),
+                                    );
+                                  }
+                                } finally {
+                                  if (mounted) setState(() => loading = false);
                                 }
                               }
                             },
