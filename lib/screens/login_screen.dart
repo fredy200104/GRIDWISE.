@@ -114,6 +114,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     email: email, password: password);
                                 setState(() => loading = false);
 
+                                if (!context.mounted) return;
                                 if (user != null) {
                                   Navigator.pushReplacementNamed(context, '/home');
                                 } else {

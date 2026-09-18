@@ -1,4 +1,4 @@
-# Miscellaneous
+# ─── Miscellaneous ────────────────────────────────────────────────────────────
 *.class
 *.log
 *.pyc
@@ -12,42 +12,76 @@
 .swiftpm/
 migrate_working_dir/
 
-# IntelliJ related
+# ─── IntelliJ / Android Studio ───────────────────────────────────────────────
 *.iml
 *.ipr
 *.iws
 .idea/
 
-# The .vscode folder contains launch configuration and tasks you configure in
-# VS Code which you may wish to be included in version control, so this line
-# is commented out by default.
+# ─── VS Code ──────────────────────────────────────────────────────────────────
+# Descomenta si no quieres incluir la configuración de VS Code en el repo:
 #.vscode/
 
-# Flutter/Dart/Pub related
+# ─── Flutter / Dart / Pub ─────────────────────────────────────────────────────
 **/doc/api/
 **/ios/Flutter/.last_build_id
 .dart_tool/
+.flutter-plugins
 .flutter-plugins-dependencies
 .pub-cache/
 .pub/
 /build/
 /coverage/
 
-# Symbolication related
-app.*.symbols
+# Archivos generados por build_runner
+*.g.dart
+*.freezed.dart
+*.mocks.dart
 
-# Obfuscation related
-app.*.map.json
-
-# Android Studio will place build artifacts here
+# ─── Android ──────────────────────────────────────────────────────────────────
+# Configuración local con rutas absolutas al SDK (no portable entre máquinas)
+android/local.properties
 /android/app/debug
 /android/app/profile
 /android/app/release
 
-# Secrets / environment
+# Keystore de firma de releases (NUNCA subir al repositorio)
+*.jks
+*.keystore
+android/key.properties
+
+# ─── iOS ──────────────────────────────────────────────────────────────────────
+ios/Flutter/flutter_export_environment.sh
+ios/.symlinks/
+ios/Pods/
+ios/Podfile.lock
+
+# ─── Symbols / Obfuscation ────────────────────────────────────────────────────
+app.*.symbols
+app.*.map.json
+
+# ─── Secrets / Variables de entorno ──────────────────────────────────────────
+# NUNCA subir credenciales privadas al repositorio
 .env
 .env.*
+!.env.example
 *.pem
 *serviceAccount*.json
 firebase-adminsdk*.json
-node_modules
+
+# ─── Google Firebase — Archivos de configuración privados ─────────────────────
+# El google-services.json (Android) ya está incluido con datos reales de Firebase.
+# Si prefieres excluirlo también, descomenta la siguiente línea:
+#google-services.json
+
+# GoogleService-Info.plist de iOS: contiene API keys privadas
+# El archivo en el repo es un PLACEHOLDER — el real debe obtenerse de Firebase Console
+# y debe IGNORARSE aquí para no sobreescribir el placeholder con datos reales accidentalmente.
+# Agrega la ruta exacta si quieres ignorar el real:
+#ios/Runner/GoogleService-Info.plist
+
+# ─── Node.js ──────────────────────────────────────────────────────────────────
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

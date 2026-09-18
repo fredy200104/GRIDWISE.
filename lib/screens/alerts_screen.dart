@@ -29,15 +29,15 @@ class AlertsScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(Icons.notifications_off_outlined,
-                      size: 64, color: Colors.white.withOpacity(0.15)),
+                      size: 64, color: Colors.white.withValues(alpha: 0.15)),
                   const SizedBox(height: 16),
                   Text('Sin alertas',
                       style: TextStyle(
-                          color: Colors.white.withOpacity(0.4), fontSize: 18)),
+                          color: Colors.white.withValues(alpha: 0.4), fontSize: 18)),
                   const SizedBox(height: 8),
                   Text('¡Tu consumo está bajo control!',
                       style: TextStyle(
-                          color: Colors.white.withOpacity(0.25), fontSize: 13)),
+                          color: Colors.white.withValues(alpha: 0.25), fontSize: 13)),
                 ],
               ),
             );
@@ -56,7 +56,7 @@ class AlertsScreen extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                         decoration: BoxDecoration(
-                          color: Colors.redAccent.withOpacity(0.12),
+                          color: Colors.redAccent.withValues(alpha: 0.12),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
@@ -142,7 +142,7 @@ class _AlertCard extends StatelessWidget {
               : const Color(0xFF161926),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: isUnread ? color.withOpacity(0.4) : Colors.white10,
+            color: isUnread ? color.withValues(alpha: 0.4) : Colors.white10,
           ),
         ),
         child: Row(
@@ -152,7 +152,7 @@ class _AlertCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: color.withOpacity(0.12),
+                color: color.withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(_severityIcon, color: color, size: 20),
@@ -191,7 +191,7 @@ class _AlertCard extends StatelessWidget {
                   Text(
                     alert.message,
                     style: TextStyle(
-                      color: Colors.white.withOpacity(isUnread ? 0.6 : 0.35),
+                      color: Colors.white.withValues(alpha: isUnread ? 0.6 : 0.35),
                       fontSize: 12,
                       height: 1.4,
                     ),
@@ -201,7 +201,7 @@ class _AlertCard extends StatelessWidget {
                     DateFormat("d MMM yyyy · HH:mm", 'es_ES')
                         .format(alert.triggeredAt),
                     style: TextStyle(
-                      color: Colors.white.withOpacity(0.3),
+                      color: Colors.white.withValues(alpha: 0.3),
                       fontSize: 10,
                     ),
                   ),

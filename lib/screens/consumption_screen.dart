@@ -19,6 +19,7 @@ class _DashboardTabState extends State<DashboardTab> {
   final _alertService = AlertService();
   List<ConsumptionPoint> _chartData = [];
   bool _chartLoading = true;
+  bool _hasDevices = false;
 
   @override
   void initState() {
@@ -27,18 +28,21 @@ class _DashboardTabState extends State<DashboardTab> {
   }
 
   Future<void> _loadChartData() async {
-    // Cargar datos del gráfico Y summary EN PARALELO para reducir latencia.
+    // Cargar hasDevices, datos del gráfico y summary EN PARALELO.
     final results = await Future.wait([
       _dashboardService.getLast7DaysData(),
       _dashboardService.refreshDashboardSummary(),
+      _dashboardService.hasDevices(),
     ]);
 
-    final data    = results[0] as List<ConsumptionPoint>;
-    final summary = results[1] as Map<String, dynamic>;
+    final data       = results[0] as List<ConsumptionPoint>;
+    final summary    = results[1] as Map<String, dynamic>;
+    final hasDevices = results[2] as bool;
 
     if (mounted) {
       setState(() {
         _chartData    = data;
+        _hasDevices   = hasDevices;
         _chartLoading = false;
       });
     }
@@ -280,9 +284,32 @@ class _DashboardTabState extends State<DashboardTab> {
               ? Center(
                   child: CircularProgressIndicator(color: colorScheme.primary),
                 )
-              : LineChart(_buildLineChart(context)),
+              : !_hasDevices
+                  ? _buildNoDevicesChart(colorScheme)
+                  : LineChart(_buildLineChart(context)),
         ),
       ],
+    );
+  }
+
+  Widget _buildNoDevicesChart(ColorScheme colorScheme) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.devices_other_outlined,
+              size: 36, color: colorScheme.onSurfaceVariant.withOpacity(0.4)),
+          const SizedBox(height: 10),
+          Text(
+            'Registra dispositivos para ver\ntu consumo real',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: colorScheme.onSurfaceVariant.withOpacity(0.6),
+              fontSize: 13,
+            ),
+          ),
+        ],
+      ),
     );
   }
 

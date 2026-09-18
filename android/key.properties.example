@@ -1,0 +1,27 @@
+# GridWise — Plantilla de configuración de firma Android
+#
+# INSTRUCCIONES:
+# 1. Copia este archivo como: android/key.properties
+# 2. Completa los valores con los datos de tu keystore
+# 3. NUNCA subas android/key.properties al repositorio (está en .gitignore)
+#
+# Para generar un keystore nuevo:
+# keytool -genkey -v -keystore ~/gridwise-release.jks \
+#   -keyalg RSA -keysize 2048 -validity 10000 -alias gridwise-key
+#
+# Documentación completa:
+# https://docs.flutter.dev/deployment/android#create-an-upload-keystore
+
+# Contraseña del archivo keystore (.jks)
+storePassword=TU_CONTRASEÑA_DEL_KEYSTORE
+
+# Contraseña de la clave dentro del keystore
+keyPassword=TU_CONTRASEÑA_DE_LA_CLAVE
+
+# Alias de la clave dentro del keystore
+keyAlias=gridwise-key
+
+# Ruta absoluta al archivo .jks
+# Windows: C:/Users/TuUsuario/gridwise-release.jks
+# macOS/Linux: /Users/TuUsuario/gridwise-release.jks
+storeFile=/ruta/absoluta/a/gridwise-release.jks

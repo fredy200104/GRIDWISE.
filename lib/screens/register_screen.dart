@@ -51,7 +51,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
               child: Card(
                 elevation: isDark ? 8 : 2,
-                shadowColor: isDark ? Colors.black : colorScheme.outline.withOpacity(0.1),
+                shadowColor: isDark ? Colors.black : colorScheme.outline.withValues(alpha: 0.1),
                 color: colorScheme.surface,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                 child: Padding(
@@ -202,7 +202,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                             style: OutlinedButton.styleFrom(
                               backgroundColor: colorScheme.surface,
-                              side: BorderSide(color: colorScheme.outline.withOpacity(0.3), width: 1.5),
+                              side: BorderSide(color: colorScheme.outline.withValues(alpha: 0.3), width: 1.5),
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                             ),
                           ),

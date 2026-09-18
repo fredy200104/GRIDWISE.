@@ -133,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
               return Stack(
                 children: [
                   IconButton(
-                    icon: Icon(Icons.notifications_outlined, color: theme.appBarTheme.foregroundColor?.withOpacity(0.7)),
+                    icon: Icon(Icons.notifications_outlined, color: theme.appBarTheme.foregroundColor?.withValues(alpha: 0.7)),
                     onPressed: () => setState(() => _selectedIndex = 3),
                   ),
                   if (count > 0)
@@ -174,11 +174,11 @@ class _HomeScreenState extends State<HomeScreen> {
         decoration: BoxDecoration(
           color: theme.scaffoldBackgroundColor,
           border: Border(
-            top: BorderSide(color: colorScheme.outline.withOpacity(0.2), width: 1),
+            top: BorderSide(color: colorScheme.outline.withValues(alpha: 0.2), width: 1),
           ),
           boxShadow: isDark ? null : [
             BoxShadow(
-              color: colorScheme.outline.withOpacity(0.05),
+              color: colorScheme.outline.withValues(alpha: 0.05),
               blurRadius: 10,
               offset: const Offset(0, -4),
             ),
@@ -212,7 +212,7 @@ class _HomeScreenState extends State<HomeScreen> {
         duration: const Duration(milliseconds: 250),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? colorScheme.primary.withOpacity(isDark ? 0.2 : 0.1) : Colors.transparent,
+          color: isSelected ? colorScheme.primary.withValues(alpha: isDark ? 0.2 : 0.1) : Colors.transparent,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Column(
@@ -220,14 +220,14 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Icon(
               isSelected ? tab.activeIcon : tab.icon,
-              color: isSelected ? colorScheme.primary : colorScheme.onSurfaceVariant.withOpacity(0.5),
+              color: isSelected ? colorScheme.primary : colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
               size: 24,
             ),
             const SizedBox(height: 4),
             Text(
               tab.label,
               style: TextStyle(
-                color: isSelected ? colorScheme.primary : colorScheme.onSurfaceVariant.withOpacity(0.5),
+                color: isSelected ? colorScheme.primary : colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
                 fontSize: 10,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
               ),

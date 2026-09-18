@@ -2,30 +2,66 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<!-- Optimización de rendimiento en iPhone -->
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
+
+	<!-- Región de desarrollo del bundle -->
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+
+	<!-- Nombre visible de la app en la pantalla de inicio -->
 	<key>CFBundleDisplayName</key>
-	<string>Gridwise</string>
+	<string>GridWise</string>
+
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
+
+	<!-- Bundle Identifier: debe coincidir con el registrado en Firebase Console -->
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
+
 	<key>CFBundleName</key>
 	<string>gridwise</string>
+
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
+
 	<key>CFBundleShortVersionString</key>
 	<string>$(FLUTTER_BUILD_NAME)</string>
+
 	<key>CFBundleSignature</key>
 	<string>????</string>
+
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+
+	<!-- ──────────────────────────────────────────────────────────── -->
+	<!--   PERMISOS DE PRIVACIDAD — REQUERIDOS POR App Store         -->
+	<!-- ──────────────────────────────────────────────────────────── -->
+
+	<!-- image_picker: Acceso a galería de fotos para seleccionar foto de perfil -->
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>GridWise necesita acceso a tu galería para que puedas seleccionar una foto de perfil.</string>
+
+	<!-- image_picker: Acceso a cámara para tomar foto de perfil directamente -->
+	<key>NSCameraUsageDescription</key>
+	<string>GridWise necesita acceso a tu cámara para que puedas tomar una foto de perfil.</string>
+
+	<!-- image_picker: Permiso para guardar imágenes en la biblioteca de fotos -->
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>GridWise necesita permiso para guardar imágenes en tu biblioteca de fotos.</string>
+
+	<!-- ──────────────────────────────────────────────────────────── -->
+	<!--   ESCENAS — CONFIGURACIÓN UI                               -->
+	<!-- ──────────────────────────────────────────────────────────── -->
+
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
@@ -47,18 +83,25 @@
 			</array>
 		</dict>
 	</dict>
+
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
+
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
+
+	<!-- Orientaciones soportadas en iPhone -->
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+
+	<!-- Orientaciones soportadas en iPad -->
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

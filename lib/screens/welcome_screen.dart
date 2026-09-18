@@ -76,7 +76,7 @@ class WelcomeScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(24),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(isDark ? 0.3 : 0.05),
+                          color: Colors.black.withValues(alpha: isDark ? 0.3 : 0.05),
                           blurRadius: 20,
                           offset: const Offset(0, 8),
                         ),
@@ -102,7 +102,7 @@ class WelcomeScreen extends StatelessWidget {
                             onPressed: () async {
                               final user =
                                   await _authService.signInWithGoogle();
-                              if (user != null) {
+                              if (user != null && context.mounted) {
                                 Navigator.pushReplacementNamed(
                                     context, '/home');
                               }
@@ -122,7 +122,7 @@ class WelcomeScreen extends StatelessWidget {
                             style: OutlinedButton.styleFrom(
                               backgroundColor: colorScheme.surface,
                               side: BorderSide(
-                                color: colorScheme.outline.withOpacity(0.3),
+                                color: colorScheme.outline.withValues(alpha: 0.3),
                                 width: 1.5,
                               ),
                               shape: RoundedRectangleBorder(
@@ -212,7 +212,7 @@ class WelcomeScreen extends StatelessWidget {
                             ),
                           ),
                         const SizedBox(height: 18),
-                        Divider(color: colorScheme.outline.withOpacity(0.2)),
+                        Divider(color: colorScheme.outline.withValues(alpha: 0.2)),
                         const SizedBox(height: 12),
                         Align(
                           alignment: Alignment.centerLeft,

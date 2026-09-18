@@ -53,7 +53,7 @@ class DeviceCard extends StatelessWidget {
         color: const Color(0xFF1E2336),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: device.isActive ? color.withOpacity(0.4) : Colors.white10,
+          color: device.isActive ? color.withValues(alpha: 0.4) : Colors.white10,
         ),
       ),
       child: Column(
@@ -65,7 +65,7 @@ class DeviceCard extends StatelessWidget {
                 width: 46,
                 height: 46,
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.15),
+                  color: color.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(_resolveIcon(device.iconKey), color: color, size: 24),
@@ -88,7 +88,7 @@ class DeviceCard extends StatelessWidget {
                     Text(
                       '${device.powerWatts.toStringAsFixed(0)}W · ${device.dailyUsageHours.toStringAsFixed(1)}h/día · ${device.location}',
                       style: TextStyle(
-                        color: Colors.white.withOpacity(0.5),
+                        color: Colors.white.withValues(alpha: 0.5),
                         fontSize: 11,
                       ),
                     ),
@@ -99,7 +99,7 @@ class DeviceCard extends StatelessWidget {
               Switch(
                 value: device.isActive,
                 onChanged: onToggle,
-                activeColor: const Color(0xFF00C853),
+                activeThumbColor: const Color(0xFF00C853),
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
             ],
@@ -112,7 +112,7 @@ class DeviceCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 decoration: BoxDecoration(
-                  color: activeColor.withOpacity(0.1),
+                  color: activeColor.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Row(
@@ -143,7 +143,7 @@ class DeviceCard extends StatelessWidget {
               IconButton(
                 onPressed: onDelete,
                 icon: const Icon(Icons.delete_outline, size: 18),
-                color: Colors.redAccent.withOpacity(0.7),
+                color: Colors.redAccent.withValues(alpha: 0.7),
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
               ),

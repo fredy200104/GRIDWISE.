@@ -9,7 +9,8 @@ plugins {
 }
 
 android {
-    namespace = "com.example.gridwise"
+    // ID único de la aplicación GridWise en el ecosistema Android
+    namespace = "com.gridwise.app"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -23,11 +24,14 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.example.gridwise"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
+        // Application ID único para GridWise en Google Play Store
+        applicationId = "com.gridwise.app"
+
+        // minSdk 23 requerido por:
+        //   - firebase_auth (autenticación biométrica, secure storage)
+        //   - google_sign_in (OAuth 2.0 con Chrome Custom Tabs)
+        //   - image_picker (acceso a MediaStore moderno)
+        minSdk = 23
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
@@ -35,8 +39,8 @@ android {
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
+            // Para producción real: configurar signing con keystore propio.
+            // Ver: https://docs.flutter.dev/deployment/android#create-an-upload-keystore
             signingConfig = signingConfigs.getByName("debug")
         }
     }

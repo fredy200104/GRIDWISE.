@@ -53,14 +53,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       icon: Icons.person_outline,
                       onEdit: (val) => _userService.updateDisplayName(val),
                     ),
-                    Divider(color: Theme.of(context).colorScheme.outline.withOpacity(0.1), height: 1),
+                    Divider(color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.1), height: 1),
                     _readOnlyTile(
                       context,
                       label: 'Correo',
                       value: user?.email ?? authUser?.email ?? '—',
                       icon: Icons.email_outlined,
                     ),
-                    Divider(color: Theme.of(context).colorScheme.outline.withOpacity(0.1), height: 1),
+                    Divider(color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.1), height: 1),
                     _editableTile(
                       context,
                       label: 'Teléfono',
@@ -87,7 +87,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         tariffRateKwh: double.tryParse(val),
                       ),
                     ),
-                    Divider(color: Theme.of(context).colorScheme.outline.withOpacity(0.1), height: 1),
+                    Divider(color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.1), height: 1),
                     _editableTile(
                       context,
                       label: 'Umbral de alerta (kWh/mes)',
@@ -134,13 +134,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 style: TextStyle(
                                     color: Theme.of(context).colorScheme.onSurface, fontSize: 14)),
                           ),
-                          Switch(
-                            value: user?.notificationsEnabled ?? true,
-                            onChanged: (val) => _userService.updatePreferences(
-                              notificationsEnabled: val,
-                            ),
-                            activeColor: Theme.of(context).colorScheme.primary,
-                          ),
+                           Switch(
+                             value: user?.notificationsEnabled ?? true,
+                             onChanged: (val) => _userService.updatePreferences(
+                               notificationsEnabled: val,
+                             ),
+                             activeThumbColor: Theme.of(context).colorScheme.primary,
+                           ),
                         ],
                       ),
                     ),
@@ -213,7 +213,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
-                    color: colorScheme.primary.withOpacity(isDark ? 0.4 : 0.1),
+                    color: colorScheme.primary.withValues(alpha: isDark ? 0.4 : 0.1),
                     blurRadius: 20,
                     offset: const Offset(0, 8),
                   ),
@@ -257,12 +257,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
         color: colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: colorScheme.outline.withOpacity(isDark ? 0.3 : 0.1),
+          color: colorScheme.outline.withValues(alpha: isDark ? 0.3 : 0.1),
           width: 1,
         ),
         boxShadow: isDark ? null : [
           BoxShadow(
-            color: colorScheme.outline.withOpacity(0.05),
+            color: colorScheme.outline.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -276,7 +276,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: Text(
               title.toUpperCase(),
               style: TextStyle(
-                color: colorScheme.onSurfaceVariant.withOpacity(0.8),
+                color: colorScheme.onSurfaceVariant.withValues(alpha: 0.8),
                 fontSize: 11,
                 fontWeight: FontWeight.w700,
                 letterSpacing: 1,
@@ -305,7 +305,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           style: TextStyle(color: colorScheme.onSurfaceVariant, fontSize: 11)),
       subtitle: Text(value,
           style: TextStyle(color: colorScheme.onSurface, fontSize: 15)),
-      trailing: Icon(Icons.edit_outlined, color: colorScheme.onSurfaceVariant.withOpacity(0.5), size: 16),
+       trailing: Icon(Icons.edit_outlined, color: colorScheme.onSurfaceVariant.withValues(alpha: 0.5), size: 16),
       dense: true,
       onTap: () => _showEditDialog(ctx,
           label: label, initialValue: value, keyboardType: keyboardType, onSave: onEdit),

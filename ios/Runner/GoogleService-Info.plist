@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  ╔══════════════════════════════════════════════════════════════════════════════╗
+  ║         GRIDWISE — GoogleService-Info.plist (PLACEHOLDER)                  ║
+  ╠══════════════════════════════════════════════════════════════════════════════╣
+  ║  ESTE ARCHIVO ES UN PLACEHOLDER. Para que la app funcione en iOS:           ║
+  ║                                                                              ║
+  ║  1. Ve a Firebase Console → https://console.firebase.google.com             ║
+  ║  2. Selecciona tu proyecto "gridwise"                                        ║
+  ║  3. Ve a Configuración del Proyecto (⚙️) → General                           ║
+  ║  4. En "Tus apps", selecciona la app iOS (com.gridwise.app)                  ║
+  ║  5. Si aún no existe, crea la app iOS con Bundle ID: com.gridwise.app        ║
+  ║  6. Descarga el archivo GoogleService-Info.plist                             ║
+  ║  7. Reemplaza ESTE archivo con el descargado                                  ║
+  ║                                                                              ║
+  ║  IMPORTANTE: El archivo real contiene credenciales privadas.                 ║
+  ║  Está incluido en .gitignore y NO debe subirse al repositorio.               ║
+  ╚══════════════════════════════════════════════════════════════════════════════╝
+-->
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>REEMPLAZAR_CON_CLIENT_ID_DE_FIREBASE</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>REEMPLAZAR_CON_REVERSED_CLIENT_ID</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>REEMPLAZAR_CON_ANDROID_CLIENT_ID</string>
+	<key>API_KEY</key>
+	<string>REEMPLAZAR_CON_API_KEY</string>
+	<key>GCM_SENDER_ID</key>
+	<string>REEMPLAZAR_CON_GCM_SENDER_ID</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.gridwise.app</string>
+	<key>PROJECT_ID</key>
+	<string>REEMPLAZAR_CON_PROJECT_ID</string>
+	<key>STORAGE_BUCKET</key>
+	<string>REEMPLAZAR_CON_STORAGE_BUCKET</string>
+	<key>IS_ADS_ENABLED</key>
+	<false/>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false/>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true/>
+	<key>IS_GCM_ENABLED</key>
+	<true/>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true/>
+	<key>GOOGLE_APP_ID</key>
+	<string>REEMPLAZAR_CON_GOOGLE_APP_ID</string>
+</dict>
+</plist>

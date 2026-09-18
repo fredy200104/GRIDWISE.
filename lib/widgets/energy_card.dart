@@ -31,12 +31,12 @@ class EnergyCard extends StatelessWidget {
         color: colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: isDark ? color.withOpacity(0.3) : colorScheme.outline.withOpacity(0.2), 
+          color: isDark ? color.withValues(alpha: 0.3) : colorScheme.outline.withValues(alpha: 0.2), 
           width: 1
         ),
         boxShadow: [
           BoxShadow(
-            color: isDark ? color.withOpacity(0.08) : colorScheme.outline.withOpacity(0.05),
+            color: isDark ? color.withValues(alpha: 0.08) : colorScheme.outline.withValues(alpha: 0.05),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
@@ -50,7 +50,7 @@ class EnergyCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.15),
+                  color: color.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Icon(icon, color: color, size: 20),
@@ -60,7 +60,7 @@ class EnergyCard extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                   decoration: BoxDecoration(
-                    color: color.withOpacity(0.12),
+                    color: color.withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(

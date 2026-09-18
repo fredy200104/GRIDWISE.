@@ -19,6 +19,7 @@ class _ReportsScreenState extends State<ReportsScreen>
   List<ConsumptionPoint> _monthData = [];
   List<ConsumptionPoint> _hourlyData = [];
   bool _loading = true;
+  bool _hasDevices = false;
 
   @override
   void initState() {
@@ -39,12 +40,14 @@ class _ReportsScreenState extends State<ReportsScreen>
       _service.getLast24HoursData(),
       _service.getLast7DaysData(),
       _service.getCurrentMonthData(),
+      _service.hasDevices(),
     ]);
     if (mounted) {
       setState(() {
-        _hourlyData = res[0];
-        _weekData = res[1];
-        _monthData = res[2];
+        _hourlyData = res[0] as List<ConsumptionPoint>;
+        _weekData   = res[1] as List<ConsumptionPoint>;
+        _monthData  = res[2] as List<ConsumptionPoint>;
+        _hasDevices = res[3] as bool;
         _loading = false;
       });
     }
@@ -90,16 +93,71 @@ class _ReportsScreenState extends State<ReportsScreen>
             child: _loading
                 ? const Center(
                     child: CircularProgressIndicator(color: Color(0xFF00C853)))
-                : TabBarView(
-                    controller: _tabController,
-                    children: [
-                      _buildDailyTab(),
-                      _buildWeeklyTab(),
-                      _buildMonthlyTab(),
-                    ],
-                  ),
+                : !_hasDevices
+                    ? _buildNoDevicesState()
+                    : TabBarView(
+                        controller: _tabController,
+                        children: [
+                          _buildDailyTab(),
+                          _buildWeeklyTab(),
+                          _buildMonthlyTab(),
+                        ],
+                      ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildNoDevicesState() {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(32),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                color: colorScheme.surfaceVariant,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(Icons.insert_chart_outlined_rounded,
+                  size: 40, color: colorScheme.onSurfaceVariant.withOpacity(0.5)),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              'Sin datos de consumo',
+              style: TextStyle(
+                color: colorScheme.onSurface,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Registra tus dispositivos eléctricos para ver\nlos reportes de consumo calculados\nsegún su potencia y horas de uso.',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: colorScheme.onSurfaceVariant,
+                fontSize: 14,
+                height: 1.5,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              'Los gráficos se generan automáticamente\ncon tu tarifa y el consumo de cada dispositivo.',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: colorScheme.onSurfaceVariant.withOpacity(0.6),
+                fontSize: 12,
+                height: 1.5,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

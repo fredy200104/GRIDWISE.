@@ -1,5 +1,5 @@
 name: gridwise
-description: "A new Flutter project."
+description: "GridWise — Plataforma inteligente de monitoreo y gestión energética con IA (Gemini), IoT (MQTT) y Firebase."
 publish_to: 'none'
 
 version: 1.0.0+1

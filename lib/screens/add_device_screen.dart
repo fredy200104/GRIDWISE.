@@ -220,7 +220,7 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
                     Switch(
                       value: _isActive,
                       onChanged: (v) => setState(() => _isActive = v),
-                      activeColor: const Color(0xFF00C853),
+                      activeThumbColor: const Color(0xFF00C853),
                     ),
                   ],
                 ),
@@ -264,7 +264,7 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
     return Text(
       text,
       style: TextStyle(
-        color: Colors.white.withOpacity(0.7),
+        color: Colors.white.withValues(alpha: 0.7),
         fontSize: 12,
         fontWeight: FontWeight.w600,
         letterSpacing: 0.5,
@@ -286,7 +286,7 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
       style: const TextStyle(color: Colors.white),
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: TextStyle(color: Colors.white.withOpacity(0.3)),
+        hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.3)),
         prefixIcon: Icon(icon, color: Colors.white38, size: 20),
         filled: true,
         fillColor: const Color(0xFF1E2336),

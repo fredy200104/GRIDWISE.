@@ -119,7 +119,7 @@ app.get('/health', (req, res) => {
   res.status(200).json({
     status: 'ok',
     service: 'GridWise Residential Backend',
-    features: ['MQTT', 'Socket.IO Chat', 'OpenAI'],
+    features: ['MQTT', 'Socket.IO Chat', 'Gemini AI'],
   });
 });
 

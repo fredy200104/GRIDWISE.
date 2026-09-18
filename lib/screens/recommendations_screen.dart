@@ -43,7 +43,7 @@ class RecommendationsScreen extends StatelessWidget {
                   child: ListTile(
                     contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     leading: CircleAvatar(
-                      backgroundColor: (tip['color'] as Color).withOpacity(0.15),
+                      backgroundColor: (tip['color'] as Color).withValues(alpha: 0.15),
                       child: Icon(tip['icon'] as IconData, color: tip['color'] as Color),
                     ),
                     title: Text(
