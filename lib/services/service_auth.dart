@@ -21,7 +21,8 @@ class AuthService {
     required String phone,
   }) async {
     try {
-      if (!_isValidEmail(email) || password.length < 6) return null;
+      if (!_isValidEmail(email)) return null;
+      if (password.length < 8 || !RegExp(r'[0-9]').hasMatch(password)) return null;
       UserCredential result = await _auth.createUserWithEmailAndPassword(
         email: email.trim(),
         password: password,
@@ -51,7 +52,8 @@ class AuthService {
     required String password,
   }) async {
     try {
-      if (!_isValidEmail(email) || password.length < 6) return null;
+      if (!_isValidEmail(email)) return null;
+      if (password.length < 8) return null;
       UserCredential result = await _auth.signInWithEmailAndPassword(
         email: email.trim(),
         password: password,

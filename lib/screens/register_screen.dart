@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../services/service_auth.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -17,14 +18,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String password = '';
   String phone = '';
   bool loading = false;
+  bool _obscurePassword = true;
 
   bool _isValidEmail(String value) {
-    return RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$').hasMatch(value.trim());
+    return RegExp(r'^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$')
+        .hasMatch(value.trim());
   }
 
-  bool _isValidPhone(String value) {
-    final normalized = value.replaceAll(RegExp(r'[^0-9+]'), '');
-    return normalized.length >= 7;
+  bool _isValidPassword(String value) {
+    if (value.length < 8) return false;
+    return RegExp(r'[0-9]').hasMatch(value);
   }
 
   @override
@@ -83,10 +86,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         const SizedBox(height: 16),
                         TextFormField(
                           style: TextStyle(color: colorScheme.onSurface),
+                          keyboardType: TextInputType.emailAddress,
                           decoration: InputDecoration(
-                            labelText: "Correo",
+                            labelText: "Correo electrónico",
                             labelStyle: TextStyle(color: colorScheme.onSurfaceVariant),
-                            prefixIcon: Icon(Icons.email, color: colorScheme.outline),
+                            prefixIcon: Icon(Icons.email_outlined, color: colorScheme.outline),
                             border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                             filled: true,
                             fillColor: isDark ? colorScheme.surface : const Color(0xFFF1F3F4),
@@ -95,21 +99,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               borderSide: BorderSide(color: colorScheme.primary, width: 2),
                             ),
                           ),
-                          onChanged: (val) => email = val,
+                          onChanged: (val) => email = val.trim(),
                           validator: (val) {
                             final value = (val ?? '').trim();
                             if (value.isEmpty) return 'Ingresa tu correo';
-                            if (!_isValidEmail(value)) return 'Correo invalido';
+                            if (!_isValidEmail(value)) {
+                              return 'Ingresa un correo válido (ej: usuario@gmail.com)';
+                            }
                             return null;
                           },
                         ),
                         const SizedBox(height: 16),
                         TextFormField(
                           style: TextStyle(color: colorScheme.onSurface),
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                            LengthLimitingTextInputFormatter(15),
+                          ],
                           decoration: InputDecoration(
                             labelText: "Teléfono",
                             labelStyle: TextStyle(color: colorScheme.onSurfaceVariant),
-                            prefixIcon: Icon(Icons.phone, color: colorScheme.outline),
+                            prefixIcon: Icon(Icons.phone_outlined, color: colorScheme.outline),
+                            hintText: 'Solo números',
+                            hintStyle: TextStyle(color: colorScheme.onSurfaceVariant.withOpacity(0.4), fontSize: 12),
                             border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                             filled: true,
                             fillColor: isDark ? colorScheme.surface : const Color(0xFFF1F3F4),
@@ -121,19 +134,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           onChanged: (val) => phone = val,
                           validator: (val) {
                             final value = (val ?? '').trim();
-                            if (value.isEmpty) return 'Ingresa tu telefono';
-                            if (!_isValidPhone(value)) return 'Telefono invalido';
+                            if (value.isEmpty) return 'Ingresa tu número de teléfono';
+                            if (value.length < 7) return 'El teléfono debe tener al menos 7 dígitos';
                             return null;
                           },
                         ),
                         const SizedBox(height: 16),
                         TextFormField(
-                          obscureText: true,
+                          obscureText: _obscurePassword,
                           style: TextStyle(color: colorScheme.onSurface),
                           decoration: InputDecoration(
                             labelText: "Contraseña",
                             labelStyle: TextStyle(color: colorScheme.onSurfaceVariant),
-                            prefixIcon: Icon(Icons.lock, color: colorScheme.outline),
+                            prefixIcon: Icon(Icons.lock_outline, color: colorScheme.outline),
+                            hintText: 'Mín. 8 caracteres y 1 número',
+                            hintStyle: TextStyle(color: colorScheme.onSurfaceVariant.withOpacity(0.4), fontSize: 11),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                                color: colorScheme.outline,
+                                size: 20,
+                              ),
+                              onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                            ),
                             border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                             filled: true,
                             fillColor: isDark ? colorScheme.surface : const Color(0xFFF1F3F4),
@@ -143,7 +166,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                           ),
                           onChanged: (val) => password = val,
-                          validator: (val) => val!.length < 6 ? 'Mínimo 6 caracteres' : null,
+                          validator: (val) {
+                            final value = val ?? '';
+                            if (value.isEmpty) return 'Ingresa una contraseña';
+                            if (value.length < 8) return 'Mínimo 8 caracteres';
+                            if (!RegExp(r'[0-9]').hasMatch(value)) {
+                              return 'Debe contener al menos 1 número';
+                            }
+                            return null;
+                          },
                         ),
                         const SizedBox(height: 32),
                         SizedBox(
@@ -159,10 +190,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               if (_formKey.currentState!.validate()) {
                                 setState(() => loading = true);
                                 var user = await _authService.registerWithEmailPassword(
-                                  email: email,
+                                  email: email.trim(),
                                   password: password,
-                                  name: name,
-                                  phone: phone,
+                                  name: name.trim(),
+                                  phone: phone.trim(),
                                 );
                                 setState(() => loading = false);
 
@@ -170,7 +201,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   Navigator.pushReplacementNamed(context, '/home');
                                 } else if (context.mounted) {
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(content: Text('Error al registrar usuario')),
+                                    SnackBar(
+                                      content: const Text('No se pudo registrar. Verifica tus datos o intenta con otro correo.'),
+                                      backgroundColor: Theme.of(context).colorScheme.error,
+                                      behavior: SnackBarBehavior.floating,
+                                    ),
                                   );
                                 }
                               }
